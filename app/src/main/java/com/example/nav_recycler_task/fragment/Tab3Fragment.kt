@@ -1,14 +1,10 @@
 package com.example.nav_recycler_task.fragment
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import androidx.compose.ui.graphics.Color
-import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -42,13 +38,10 @@ class Tab3Fragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tab3, container, false)
-
-        var author: String
-
         val apiService = RetroFitClient.getInstance()
-        var repository = NewsRespository(apiService)
+        val repository = NewsRespository(apiService)
 
-        var viewModel = ViewModelProvider(
+        val viewModel = ViewModelProvider(
             requireActivity(),
             DemoViewModelFactory(respository = repository)
         )[DemoViewModel::class.java]
@@ -64,9 +57,12 @@ class Tab3Fragment : Fragment() {
         }
 
 
-        binding.btnFilter.setOnClickListener {
-            val dialog = BottomSheetDialog(requireContext())
+        val list : ArrayList<String> = arrayListOf()
 
+        binding.btnFilter.setOnClickListener {
+
+            val dialog = BottomSheetDialog(requireContext())
+            dialog.dismiss()
             val view = layoutInflater.inflate(R.layout.bottomsheet_dailog_layout, null)
 
             val btnClose = view.findViewById<MaterialTextView>(R.id.txtViewReset)
@@ -87,24 +83,30 @@ class Tab3Fragment : Fragment() {
 
 
             for (genre in 0 until authorList.size) {
-                val chip = Chip(requireContext())
-                chip.text = authorList[genre]
-                chip.id = R.id.filerChip_ID
-                chipGroup.addView(chip)
-                chip.isCheckable = true
+                if (authorList[genre] != null){
+                    val chip = Chip(requireContext())
+                    chip.text = authorList[genre]
+                    chip.id = R.id.filerChip_ID
+                    chipGroup.addView(chip)
+                    chip.isCheckable = true
+                }
             }
 
             chipGroup.forEach { child ->
                 (child as Chip).setOnClickListener {
                    child.isChecked = true
-                    Log.e("text",child.text.toString())
+
+                    if (child.isChecked == true){
+                        list.addAll(listOf(child.text.toString()))
+                    }
+                    Log.e("list",list.toString())
                     for (i in 0 until authorList.size) {
                         btnDone.setOnClickListener {
-                            val list = newList.filter {
+                            val lists = newList.filter {
                                it.author == child.text.toString()
                             }
                             Log.e("list", authorList.toString())
-                            binding.recyclerView.adapter = RecyclerAdopter(list)
+                            binding.recyclerView.adapter = RecyclerAdopter(lists)
                             dialog.dismiss()
                         }
                     }
