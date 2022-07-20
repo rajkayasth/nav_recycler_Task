@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/id_homeFragment">
+
+
+    <fragment
+        android:id="@+id/id_homeFragment"
+        android:name="com.example.nav_recycler_task.fragment.HomeFragment"
+        android:label="home_fragment" />
+
+    <fragment
+        android:id="@+id/id_settingFragment"
+        android:name="com.example.nav_recycler_task.fragment.SettingFragment"
+        android:label="setting_fragment"
+        tools:layout="settingFragment" />
+
+    <fragment
+        android:id="@+id/id_chatFragment"
+        android:name="com.example.nav_recycler_task.fragment.ChatFragment"
+        android:label="chatFragment"/>
+
+</navigation>
